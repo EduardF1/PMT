@@ -2,7 +2,7 @@ package com.edfis.ppmtool.services;
 
 import com.edfis.ppmtool.domain.Project;
 import com.edfis.ppmtool.exceptions.ProjectIdException;
-import com.edfis.ppmtool.repositories.IProjectRepository;
+import com.edfis.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class ProjectService {
 
     @Autowired
-    private IProjectRepository projectRepository;
+    private ProjectRepository projectRepository;
 
     public Project saveOrUpdateProject(Project project) {
         try {
@@ -24,5 +24,9 @@ public class ProjectService {
     public Object findProjectByIdentifier(String projectId){
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
         return project != null ? project : new ProjectIdException("Project ID '" + projectId.toUpperCase() + "' already exists");
+    }
+
+    public Iterable<Project> findAllProjects(){
+        return projectRepository.findAll();
     }
 }
