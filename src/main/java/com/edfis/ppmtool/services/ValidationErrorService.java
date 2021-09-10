@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class ValidationErrorService {
 
-    public ResponseEntity<?> getValidationResult(BindingResult result) {
+    public ResponseEntity<?> validate(BindingResult result) {
         return result.hasErrors() ?
                 new ResponseEntity<>(new HashMap<>(
                         result
