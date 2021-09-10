@@ -23,7 +23,13 @@ public class Project {
     private String description;
 
     @JsonFormat(pattern = "yyyy-mm-dd")
-    private Date startDate, endDate, createdAt, updatedAt;
+    private Date startDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    private Date endDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    private Date createdAt;
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    private Date updatedAt;
 
     public Project() {
         // Required empty constructor
