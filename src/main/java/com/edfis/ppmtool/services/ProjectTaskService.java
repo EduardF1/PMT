@@ -10,6 +10,8 @@ import com.edfis.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectTaskService {
 
@@ -78,5 +80,14 @@ public class ProjectTaskService {
         ProjectTask projectTask = findProjectTaskByProjectSequence(backlogId,projectTaskId);
         projectTask = updatedTask;
         return projectTaskRepository.save(projectTask);
+    }
+
+    public void deleteProjectTaskByProjectSequence(String backlogId, String projectTaskId){
+        ProjectTask projectTask = findProjectTaskByProjectSequence(backlogId,projectTaskId);
+        Backlog backlog = projectTask.getBacklog();
+        List<ProjectTask> projectTasks = backlog.getProjectTasks();
+        projectTasks.remove(projectTask);
+
+        projectTaskRepository.delete(projectTask);
     }
 }
