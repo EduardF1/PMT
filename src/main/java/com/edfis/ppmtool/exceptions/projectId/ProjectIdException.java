@@ -1,4 +1,4 @@
-package com.edfis.ppmtool.exceptions;
+package com.edfis.ppmtool.exceptions.projectId;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

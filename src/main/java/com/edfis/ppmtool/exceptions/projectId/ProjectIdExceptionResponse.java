@@ -1,4 +1,4 @@
-package com.edfis.ppmtool.exceptions;
+package com.edfis.ppmtool.exceptions.projectId;
 
 public class ProjectIdExceptionResponse {
 

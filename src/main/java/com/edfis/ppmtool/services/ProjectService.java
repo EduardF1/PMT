@@ -2,7 +2,7 @@ package com.edfis.ppmtool.services;
 
 import com.edfis.ppmtool.domain.Backlog;
 import com.edfis.ppmtool.domain.Project;
-import com.edfis.ppmtool.exceptions.ProjectIdException;
+import com.edfis.ppmtool.exceptions.projectId.ProjectIdException;
 import com.edfis.ppmtool.repositories.BacklogRepository;
 import com.edfis.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
