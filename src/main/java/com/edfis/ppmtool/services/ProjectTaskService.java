@@ -10,8 +10,6 @@ import com.edfis.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ProjectTaskService {
 
@@ -34,7 +32,7 @@ public class ProjectTaskService {
             backlog.setPTSequence(backlogPTSequence);
             projectTask.setProjectSequence(projectIdentifier + "-" + backlogPTSequence);
             projectTask.setProjectIdentifier(projectIdentifier);
-            if (projectTask.getPriority() == null) {
+            if (projectTask.getPriority() == null || projectTask.getPriority()==0) {
                 projectTask.setPriority(3);
             }
 
