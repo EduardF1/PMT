@@ -35,4 +35,10 @@ public class BacklogController {
     public Iterable<ProjectTask> getProjectBacklog(@PathVariable String backlogId){
         return projectTaskService.findBacklogById(backlogId);
     }
+
+    @GetMapping("/{backlogId}/{projectTaskId}")
+    public ResponseEntity<?> getProjectTask(@PathVariable String backlogId, @PathVariable String projectTaskId){
+        ProjectTask projectTask = projectTaskService.findProjectTaskByProjectSequence(backlogId, projectTaskId);
+        return new ResponseEntity<>(projectTask, HttpStatus.OK);
+    }
 }
