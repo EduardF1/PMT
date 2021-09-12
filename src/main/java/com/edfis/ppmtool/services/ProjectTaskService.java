@@ -1,9 +1,11 @@
 package com.edfis.ppmtool.services;
 
 import com.edfis.ppmtool.domain.Backlog;
+import com.edfis.ppmtool.domain.Project;
 import com.edfis.ppmtool.domain.ProjectTask;
 import com.edfis.ppmtool.exceptions.project.ProjectNotFoundException;
 import com.edfis.ppmtool.repositories.BacklogRepository;
+import com.edfis.ppmtool.repositories.ProjectRepository;
 import com.edfis.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class ProjectTaskService {
 
     @Autowired
     private ProjectTaskRepository projectTaskRepository;
+    
+    @Autowired
+    private ProjectRepository projectRepository;
 
     public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
 
@@ -41,7 +46,11 @@ public class ProjectTaskService {
         }
     }
 
-    public Iterable<ProjectTask> findBacklogById(String backlogId) {
-        return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlogId);
+    public Iterable<ProjectTask> findBacklogById(String id) {
+        Project project = projectRepository.findByProjectIdentifier(id);
+        if(project == null){
+            throw new ProjectNotFoundException("Project with ID: '" + id + "' does not exist");
+        }
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 }
