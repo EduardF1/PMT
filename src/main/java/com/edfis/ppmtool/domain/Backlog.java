@@ -20,7 +20,7 @@ public class Backlog {
     @JsonIgnore // avoid endless recursion
     private Project project;
     // 1..* with projectTasks
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "backlog")
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true)
     private List<ProjectTask> projectTasks = new ArrayList<>();
 
     public Backlog() {
