@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+import static com.edfis.ppmtool.security.SecurityConstants.H2_URL;
+import static com.edfis.ppmtool.security.SecurityConstants.SIGN_UP_URLS;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -43,8 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 )
                 .permitAll()
-                .antMatchers("/api/users/**")
+                .antMatchers(SIGN_UP_URLS)
                 .permitAll()
+                .antMatchers(H2_URL).permitAll()
                 .anyRequest()
                 .authenticated();
     }
