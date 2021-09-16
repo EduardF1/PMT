@@ -1,6 +1,7 @@
 package com.edfis.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,6 +26,7 @@ public class User implements UserDetails {
     @NotBlank(message = "Password field is required")
     private String password;
     @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String confirmPassword;
     private Date createdAt;
     private Date updatedAt;
