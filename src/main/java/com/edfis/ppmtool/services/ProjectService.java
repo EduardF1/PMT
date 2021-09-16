@@ -3,6 +3,7 @@ package com.edfis.ppmtool.services;
 import com.edfis.ppmtool.domain.Backlog;
 import com.edfis.ppmtool.domain.Project;
 import com.edfis.ppmtool.domain.User;
+import com.edfis.ppmtool.exceptions.project.ProjectNotFoundException;
 import com.edfis.ppmtool.exceptions.projectId.ProjectIdException;
 import com.edfis.ppmtool.repositories.BacklogRepository;
 import com.edfis.ppmtool.repositories.ProjectRepository;
@@ -37,23 +38,26 @@ public class ProjectService {
         }
     }
 
-    public Object findProjectByIdentifier(String projectId) {
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-        return project != null ? project : new ProjectIdException("Project ID '" + projectId.toUpperCase() + "' already exists");
-    }
-
-    public Iterable<Project> findAllProjects() {
-        return projectRepository.findAll();
-    }
-
-    public void deleteProjectByIdentifier(String projectId) {
+    public Project findProjectByIdentifier(String projectId, String username) {
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
-        if (project == null) {
-            throw new ProjectIdException("Project with ID'" + projectId.toUpperCase() + "' does not exist.");
+        if(project == null){
+            throw  new ProjectIdException("Project ID '" + projectId.toUpperCase() + "' does not exist");
         }
 
-        projectRepository.delete(project);
+        if(!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project not found in your account");
+        }
+
+        return project;
+    }
+
+    public Iterable<Project> findAllProjects(String username) {
+        return projectRepository.findAllByProjectLeader(username);
+    }
+
+    public void deleteProjectByIdentifier(String projectId, String username) {
+        projectRepository.delete(findProjectByIdentifier(projectId, username));
     }
 
 
