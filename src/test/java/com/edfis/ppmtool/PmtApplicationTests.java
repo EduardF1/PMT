@@ -1,13 +1,13 @@
-//package com.edfis.ppmtool;
-//
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//@SpringBootTest
-//class PmtApplicationTests {
-//
-//    @Test
-//    void contextLoads() {
-//    }
-//
-//}
+package com.edfis.ppmtool;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class PmtApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
