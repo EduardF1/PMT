@@ -2,25 +2,33 @@ package com.edfis.ppmtool.services;
 
 import com.edfis.ppmtool.domain.Backlog;
 import com.edfis.ppmtool.domain.Project;
+import com.edfis.ppmtool.domain.User;
 import com.edfis.ppmtool.exceptions.projectId.ProjectIdException;
 import com.edfis.ppmtool.repositories.BacklogRepository;
 import com.edfis.ppmtool.repositories.ProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.edfis.ppmtool.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectService {
+    private final ProjectRepository projectRepository;
+    private final BacklogRepository backlogRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ProjectRepository projectRepository;
+    public ProjectService(ProjectRepository projectRepository, BacklogRepository backlogRepository, UserRepository userRepository) {
+        this.projectRepository = projectRepository;
+        this.backlogRepository = backlogRepository;
+        this.userRepository = userRepository;
+    }
 
-    @Autowired
-    private BacklogRepository backlogRepository;
-
-    public Project saveOrUpdateProject(Project project) {
+    public Project saveOrUpdateProject(Project project, String username) {
         String projectIdentifier = project.getProjectIdentifier().toUpperCase();
         try {
+            User user = userRepository.findByUsername(username);
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
             project.setProjectIdentifier(projectIdentifier);
+
             handleSaveOrUpdate(project, project.getId(), projectIdentifier);
 
             return projectRepository.save(project);

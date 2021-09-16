@@ -2,6 +2,7 @@ package com.edfis.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Proxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+@Proxy(lazy=false)
 @Entity
 public class User implements UserDetails {
     @Id
