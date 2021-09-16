@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -25,11 +26,11 @@ public class BacklogController {
     }
 
     @PostMapping("/{backlogId}")
-    public ResponseEntity<?> addProjectTaskToBacklog(@Valid @RequestBody ProjectTask projectTask, BindingResult result, @PathVariable String backlogId) {
+    public ResponseEntity<?> addProjectTaskToBacklog(@Valid @RequestBody ProjectTask projectTask, BindingResult result, @PathVariable String backlogId, Principal principal) {
         ResponseEntity<?> errorMap = validationErrorService.validate(result);
         if (errorMap != null) return errorMap;
 
-        ProjectTask newProjectTask = projectTaskService.addProjectTask(backlogId, projectTask);
+        ProjectTask newProjectTask = projectTaskService.addProjectTask(backlogId, projectTask, principal.getName());
         return new ResponseEntity<>(newProjectTask, HttpStatus.CREATED);
     }
 

@@ -24,28 +24,49 @@ public class ProjectService {
 
     public Project saveOrUpdateProject(Project project, String username) {
         String projectIdentifier = project.getProjectIdentifier().toUpperCase();
+
+        if (project.getId() != null) {
+            Project existingProject = projectRepository.findByProjectIdentifier(projectIdentifier);
+            if (existingProject != null
+                    && (!existingProject.getId().equals(project.getId()) || !existingProject.getProjectLeader().equals(username))) {
+                throw new ProjectNotFoundException("Project not found in your account");
+            } else if (existingProject == null) {
+                throw new ProjectNotFoundException(String.format("Project with ID: '%s' cannot be updated, because it doesn't exist", projectIdentifier));
+            }
+        }
+
         try {
             User user = userRepository.findByUsername(username);
+
             project.setUser(user);
             project.setProjectLeader(user.getUsername());
             project.setProjectIdentifier(projectIdentifier);
 
-            handleSaveOrUpdate(project, project.getId(), projectIdentifier);
+            if (project.getId() == null) {
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(projectIdentifier);
+            }
+
+            if (project.getId() != null) {
+                project.setBacklog(backlogRepository.findByProjectIdentifier(projectIdentifier));
+            }
 
             return projectRepository.save(project);
-        } catch (Exception e) {
-            throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase() + "' already exists");
+        } catch (Exception ex) {
+            throw new ProjectIdException("Project ID '" + projectIdentifier + "' already exists");
         }
     }
 
     public Project findProjectByIdentifier(String projectId, String username) {
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
-        if(project == null){
-            throw  new ProjectIdException("Project ID '" + projectId.toUpperCase() + "' does not exist");
+        if (project == null) {
+            throw new ProjectIdException("Project ID '" + projectId.toUpperCase() + "' does not exist");
         }
 
-        if(!project.getProjectLeader().equals(username)){
+        if (!project.getProjectLeader().equals(username)) {
             throw new ProjectNotFoundException("Project not found in your account");
         }
 
@@ -72,18 +93,5 @@ public class ProjectService {
 
         updatedProject.setId(oldProject.getId());
         return projectRepository.save(updatedProject);
-    }
-
-    private void handleSaveOrUpdate(Project project, Long id, String projectIdentifier) {
-        // Branching based on the project id, if an id exists for the given project, then
-        // the backlog projectIdentifier is set to that id.
-        if (id == null) {
-            Backlog backlog = new Backlog();
-            project.setBacklog(backlog);
-            backlog.setProject(project);
-            backlog.setProjectIdentifier(projectIdentifier);
-        }
-
-        if (id != null) project.setBacklog(backlogRepository.findByProjectIdentifier(projectIdentifier));
     }
 }

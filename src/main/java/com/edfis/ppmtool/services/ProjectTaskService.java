@@ -7,25 +7,26 @@ import com.edfis.ppmtool.exceptions.project.ProjectNotFoundException;
 import com.edfis.ppmtool.repositories.BacklogRepository;
 import com.edfis.ppmtool.repositories.ProjectRepository;
 import com.edfis.ppmtool.repositories.ProjectTaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectTaskService {
 
-    @Autowired
-    private BacklogRepository backlogRepository;
+    private final BacklogRepository backlogRepository;
+    private final ProjectTaskRepository projectTaskRepository;
+    private final ProjectRepository projectRepository;
+    private final ProjectService projectService;
 
-    @Autowired
-    private ProjectTaskRepository projectTaskRepository;
-    
-    @Autowired
-    private ProjectRepository projectRepository;
+    public ProjectTaskService(BacklogRepository backlogRepository, ProjectTaskRepository projectTaskRepository, ProjectRepository projectRepository, ProjectService projectService) {
+        this.backlogRepository = backlogRepository;
+        this.projectTaskRepository = projectTaskRepository;
+        this.projectRepository = projectRepository;
+        this.projectService = projectService;
+    }
 
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask, String username) {
 
-        try {
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+            Backlog backlog = projectService.findProjectByIdentifier(projectIdentifier, username).getBacklog();
             projectTask.setBacklog(backlog);
             Integer backlogPTSequence = backlog.getPTSequence();
             backlogPTSequence++;
@@ -41,9 +42,6 @@ public class ProjectTaskService {
             }
             return projectTaskRepository.save(projectTask);
 
-        } catch (Exception e) {
-            throw new ProjectNotFoundException("Project not Found");
-        }
     }
 
     public Iterable<ProjectTask> findBacklogById(String backlogId) {
