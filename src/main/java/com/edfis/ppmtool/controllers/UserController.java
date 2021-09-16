@@ -28,20 +28,19 @@ import static com.edfis.ppmtool.security.SecurityConstants.TOKEN_PREFIX;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private ValidationErrorService validationErrorService;
+    private final ValidationErrorService validationErrorService;
+    private final UserService userService;
+    private final UserValidator userValidator;
+    private final JWTTokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserValidator userValidator;
-
-    @Autowired
-    private JWTTokenProvider tokenProvider;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    public UserController(ValidationErrorService validationErrorService, UserService userService, UserValidator userValidator, JWTTokenProvider tokenProvider, AuthenticationManager authenticationManager) {
+        this.validationErrorService = validationErrorService;
+        this.userService = userService;
+        this.userValidator = userValidator;
+        this.tokenProvider = tokenProvider;
+        this.authenticationManager = authenticationManager;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {

@@ -16,11 +16,13 @@ import javax.validation.Valid;
 @RequestMapping("/api/project")
 public class ProjectController {
 
-    @Autowired
-    private ProjectService projectService;
+    private final ProjectService projectService;
+    private final ValidationErrorService validationErrorService;
 
-    @Autowired
-    private ValidationErrorService validationErrorService;
+    public ProjectController(ProjectService projectService, ValidationErrorService validationErrorService) {
+        this.projectService = projectService;
+        this.validationErrorService = validationErrorService;
+    }
 
     @PostMapping("")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result) {

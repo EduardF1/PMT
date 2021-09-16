@@ -16,11 +16,13 @@ import javax.validation.Valid;
 @RequestMapping("/api/backlog")
 public class BacklogController {
 
-    @Autowired
-    private ProjectTaskService projectTaskService;
+    private final ProjectTaskService projectTaskService;
+    private final ValidationErrorService validationErrorService;
 
-    @Autowired
-    private ValidationErrorService validationErrorService;
+    public BacklogController(ProjectTaskService projectTaskService, ValidationErrorService validationErrorService) {
+        this.projectTaskService = projectTaskService;
+        this.validationErrorService = validationErrorService;
+    }
 
     @PostMapping("/{backlogId}")
     public ResponseEntity<?> addProjectTaskToBacklog(@Valid @RequestBody ProjectTask projectTask, BindingResult result, @PathVariable String backlogId) {
