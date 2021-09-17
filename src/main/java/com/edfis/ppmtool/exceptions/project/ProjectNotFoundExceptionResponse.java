@@ -1,17 +1,17 @@
 package com.edfis.ppmtool.exceptions.project;
 
 public class ProjectNotFoundExceptionResponse {
-    private String ProjectNotFound;
+    private String projectNotFound;
 
     public ProjectNotFoundExceptionResponse(String projectNotFound) {
-        ProjectNotFound = projectNotFound;
+        this.projectNotFound = projectNotFound;
     }
 
     public String getProjectNotFound() {
-        return ProjectNotFound;
+        return projectNotFound;
     }
 
     public void setProjectNotFound(String projectNotFound) {
-        ProjectNotFound = projectNotFound;
+        this.projectNotFound = projectNotFound;
     }
 }

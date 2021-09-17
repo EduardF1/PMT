@@ -2,6 +2,7 @@ package com.edfis.ppmtool.security;
 
 import com.edfis.ppmtool.domain.User;
 import com.edfis.ppmtool.services.CustomUserDetailsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,11 +14,11 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.Collections;
 
-import static com.edfis.ppmtool.security.SecurityConstants.HEADER_STRING;
-import static com.edfis.ppmtool.security.SecurityConstants.TOKEN_PREFIX;
+
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -47,9 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getJWTFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader(HEADER_STRING);
+        String bearerToken = request.getHeader(SecurityConstants.HEADER_STRING);
         return (StringUtils.hasText(bearerToken) &&
-                bearerToken.startsWith(TOKEN_PREFIX)) ?
+                bearerToken.startsWith(SecurityConstants.TOKEN_PREFIX)) ?
                 bearerToken.substring(7) :
                 null;
     }

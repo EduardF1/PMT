@@ -7,7 +7,6 @@ import com.edfis.ppmtool.security.JWTTokenProvider;
 import com.edfis.ppmtool.services.UserService;
 import com.edfis.ppmtool.services.ValidationErrorService;
 import com.edfis.ppmtool.validator.UserValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,16 +14,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 import static com.edfis.ppmtool.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -43,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result){
         ResponseEntity<?> errorMap = validationErrorService.validate(result);
         if (errorMap != null) return errorMap;
         Authentication authentication = authenticationManager.authenticate(
@@ -58,11 +55,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
-        userValidator.validate(user, result);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
+        userValidator.validate(user,result);
 
         ResponseEntity<?> errorMap = validationErrorService.validate(result);
-        if (errorMap != null) return errorMap;
+        if(errorMap != null)return errorMap;
 
         User newUser = userService.saveUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);

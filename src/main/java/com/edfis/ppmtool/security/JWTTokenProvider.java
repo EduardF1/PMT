@@ -10,9 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.edfis.ppmtool.security.SecurityConstants.EXPIRATION_TIME;
-import static com.edfis.ppmtool.security.SecurityConstants.SECRET;
-
 @Component
 public class JWTTokenProvider {
 
@@ -21,7 +18,7 @@ public class JWTTokenProvider {
     public String generateToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Date currentDate = new Date(System.currentTimeMillis());
-        Date expiryDate = new Date(currentDate.getTime() + EXPIRATION_TIME);
+        Date expiryDate = new Date(currentDate.getTime() + SecurityConstants.EXPIRATION_TIME);
         String userId = Long.toString(user.getId());
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", (Long.toString(user.getId())));
@@ -32,13 +29,13 @@ public class JWTTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(currentDate)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET)
                 .compact();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token);
             return true;
         } catch (SignatureException exception) {
             log.info("Invalid JWT Signature");
@@ -55,7 +52,7 @@ public class JWTTokenProvider {
     }
 
     public Long getUserIdFromJWT(String token) {
-        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token).getBody();
         String id = (String) claims.get("id");
         return Long.parseLong(id);
     }

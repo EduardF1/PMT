@@ -3,7 +3,6 @@ package com.edfis.ppmtool.controllers;
 import com.edfis.ppmtool.domain.Project;
 import com.edfis.ppmtool.services.ProjectService;
 import com.edfis.ppmtool.services.ValidationErrorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
